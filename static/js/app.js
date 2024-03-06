@@ -7,28 +7,28 @@ function init() {
     d3.json('https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json').then((data)=> {
         //console.log(data)
 
-        // get the id data to the dropdwown menu
+        // get the id data to the dropdown menu
         //console.log(data.names)
         data.names.forEach(function(name) {
             dropdown.append("option").text(name).property("value");
         });
 
-        //loads initial dropdown menu option (ID 940)
+        //loads initial dropdown menu option (ID 940) match example
         let first_id = data.names[0];
         buildMetadata(first_id)
         buildCharts(first_id)
     });
 }
 
-// function to call new data when dropdown menu is selected
+// call dropdown
 function optionChanged(newSample) {
     // d3 dropdown
     let dropdownMenu = d3.select("#selDataset");
-    // Assign the value of the dropdown menu option to a variable
+    // Value assign
     let patient_no = dropdownMenu.property("value");
     //console.log(patient_no)
 
-    //populate charts
+    //charts
     buildCharts(patient_no);
     buildMetadata(patient_no)
 }
@@ -37,31 +37,30 @@ function optionChanged(newSample) {
 function buildCharts(sample) {
     d3.json('https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json').then((data) => {
         let samples = data.samples;
-        // filter for sample number data
         let resultArray = samples.filter(sampleObj => sampleObj.id == sample);
         let result = resultArray[0];
 
-        //sorts data into groups
+        //group 
         let otu_ids = result.otu_ids;
         let otu_labels = result.otu_labels;
         let sample_values = result.sample_values;
 
-        // get only top 10 otu ids for the plot OTU and reversing it. 
+        // top 10
         let OTU_toplabels = (result.otu_ids.slice(0, 10)).reverse();
-        // get the otu id's to the desired form for the plot
+        // macth form 
         let OTU_id = OTU_toplabels.map(d => "OTU " + d);
-        // get the top 10 labels for the plot
+        // top 10
         let labels =  result.otu_labels.slice(0,10);        
         
-        //sorts values by number (following class example code)
+        //sorts values by number 
         let sorted_bar = sample_values.sort(function sortFunction(a,b) {
             return b-a;
         });
         
-        //reverses array to go to biggest->smallest
+        //largest to small
         let sortedtop_values = sorted_bar.slice(0,10).reverse();
 
-       //note: need custom text values for bar chart
+    
        //horizontal bar chart code
        let barchart = [{
         type: 'bar',
@@ -73,7 +72,7 @@ function buildCharts(sample) {
       
       Plotly.newPlot('bar', barchart);
         
-        //bubble chart code
+        //bubble chart come back finsih later
         let bubbleLayout = {
             title: 'Bacteria Cultures Per Sample',
             margin: {t:0},
@@ -97,11 +96,11 @@ function buildCharts(sample) {
     });
 }
 
-// creates metadata for app and interact with #sample metadata html tag
+// metadaa pull 
 function buildMetadata(sample) {
     d3.json('https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json').then((data) => {
         let metadata = data.metadata;
-        // filter for sample number data
+        // apply filter
         let resultArray = metadata.filter(sampleObj => sampleObj.id == sample);
         let result = resultArray[0];
 
